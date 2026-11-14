@@ -1,10 +1,23 @@
-import os
+import subprocess
+import sys
+
+# Auto-install missing packages on Streamlit Cloud if not present
+try:
+    import joblib
+    import sklearn
+    import requests
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "joblib", "scikit-learn", "requests", "streamlit", "pandas", "numpy"])
+    import joblib
+    import sklearn
+    import requests
+
 import streamlit as st
-import joblib
+import pandas as pd
+import numpy as np
 from member1_data import fetch_pilot_zone_weather
 from member2_ml_fao56 import train_and_save_model, calculate_irrigation_recommendation
 from member3_validation import generate_sensitivity_table, get_nhp_validation_summary
-
 st.set_page_config(page_title="JalaMitra AI", layout="wide")
 
 # Auto-build dataset and ML model if missing or corrupted (fixes EOFError permanently!)
